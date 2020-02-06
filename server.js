@@ -41,5 +41,55 @@ app.get("/scrape", function (req, res) {
         result.link = $(this)
             .children("a")
             .attr("href");
-    })
-})
+
+        db.Article.create(result)
+            .then(function (dbArticle) {
+                console.log(dbArticle);
+            })
+            .catch(function (err) {
+                console.log(err);
+            });
+    });
+
+    res.send("Scrape Complete");
+});
+
+
+app.get("/articles", function (req, res) {
+
+    db.Article.find({}).then(function (articles) {
+
+        res.json(articles);
+
+
+    }).catch(function (err) {
+        res.json(error);
+
+    });
+});
+
+
+app.get("/articles/:id", function (req, res) {
+
+    // put items in here
+
+
+});
+
+
+app.post("/articles/:id", function (req, res) {
+
+    const articleId = req.params.id;
+
+
+    db.Note.create(req.body).then(function (savedNote) {
+        console.log(savedNote);
+    });
+
+
+
+});
+
+app.listen(PORT, function () {
+    console.log("App running on port " + PORT + "!");
+});
