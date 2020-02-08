@@ -9,7 +9,7 @@ var cheerio = require("cheerio");
 
 var db = require("./models");
 
-var port = 4000;
+var PORT = 4000;
 
 var app = express();
 
@@ -22,70 +22,85 @@ app.use(express.static("public"));
 
 
 // enter in the local house database 
-mongoose.connect("mongodb://localhost/", { useNewUrlParser: true });
+mongoose.connect("mongodb://localhost/articleScraper", { useNewUrlParser: true });
 
 app.get("/scrape", function (req, res) {
 
     // enter in the http website used for articles into axios.get
-    axios.get("").then(function (response) {
+    axios.get("https://thenextweb.com/dd/").then(function (response) {
         var $ = cheerio.load(response.data);
+
+
+        $("article h2").each(function (i, element) {
+            var result = {};
+
+
+            result.title = $(this)
+                .children("a")
+                .text();
+            result.link = $(this)
+                .children("a")
+                .attr("href");
+
+            db.Article.create(result)
+                .then(function (dbArticle) {
+                    console.log(dbArticle);
+                })
+                .catch(function (err) {
+                    console.log(err);
+                });
+        });
+
+        res.send("Scrape Complete");
     });
-
-    $("article h2").each(function (i, element) {
-        var result = {};
-
-
-        result.title = $(this)
-            .children("a")
-            .text();
-        result.link = $(this)
-            .children("a")
-            .attr("href");
-
-        db.Article.create(result)
-            .then(function (dbArticle) {
-                console.log(dbArticle);
-            })
-            .catch(function (err) {
-                console.log(err);
-            });
-    });
-
-    res.send("Scrape Complete");
 });
 
 
 app.get("/articles", function (req, res) {
 
-    db.Article.find({}).then(function (articles) {
+    db.Article.find({})
+        .then(function (articles) {
 
-        res.json(articles);
+            res.json(articles);
 
 
-    }).catch(function (err) {
-        res.json(error);
+        }).catch(function (err) {
+            res.json(error);
 
-    });
+        });
 });
 
 
 app.get("/articles/:id", function (req, res) {
 
-    // put items in here
+    db.Article.findOne({ _id: req.params.id })
 
+        .populate("note")
+        .then(function (articles) {
+            res.json(articles);
+        })
+        .catch(function (err) {
+            res.json(err);
+        });
 
 });
 
 
 app.post("/articles/:id", function (req, res) {
 
-    const articleId = req.params.id;
 
 
-    db.Note.create(req.body).then(function (savedNote) {
-        console.log(savedNote);
-    });
 
+    db.Note.create(req.body)
+        .then(function (savedNote) {
+            return db.Article.findOneAndUpdate({ _id: req.params.id }, { note: savedNote._id }, { new: true });
+        })
+        .then(function (articles) {
+            res.json(articles);
+        })
+        .catch(function (err) {
+            res.json(err);
+        });
 
 
 });
