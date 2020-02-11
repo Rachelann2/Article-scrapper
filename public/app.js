@@ -22,9 +22,9 @@ $(document).on("click", "div", function () {
 
         .then(function (data) {
             console.log(data);
-            $("#notes").append("<h2>" + data.title + "</h2>");
+            $("#notes").append("<div class='card-header'>" + data.title + "</div>");
 
-            $("#notes").append("<input id='titleinput' name='title' >");
+            $("#notes").append("<div class='card-body' id='titleinput' name='title' ></div>");
 
             $("#notes").append("<textarea id='bodyinput' name='body'></textarea>");
 
