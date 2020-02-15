@@ -1,6 +1,7 @@
 var express = require("express");
 var logger = require("morgan");
 var mongoose = require("mongoose");
+var exphbs = require("express-handlebars");
 
 
 var axios = require("axios");
@@ -17,6 +18,9 @@ app.use(logger("dev"));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.set("view engine", "handlebars");
 
 app.use(express.static("public"));
 
@@ -52,6 +56,15 @@ app.get("/scrape", function (req, res) {
         });
 
         res.send("Scrape Complete");
+    });
+});
+
+app.get("/", function (req, res) {
+    db.Article.find({}).then(function (dbResults) {
+        var object = {
+            articles: dbResults
+        };
+        res.render("index", object);
     });
 });
 

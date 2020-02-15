@@ -1,0 +1,50 @@
+<nav class="navbar">
+    <a class="navbar-brand" href="#"
+        style="text-align:center; color: white;font-family: 'Luckiest Guy', cursive;">Articles Home Page</a>
+</nav>
+<div class="image">
+    <img src="./img/newspapers.jpg" alt="newspaper" style="width:100vw;height:50vh;">
+    <h1 class="centered">Note Scraper</h1>
+
+
+</div>
+
+<div id="wrapper">
+
+
+    {{#each Articles}}
+    <div class="card">
+        <div class="card_title">
+            <a href="https://thenextweb.com/dd/{{link}}" target="_blank">{{title}}</a>
+        </div>
+        <div class="card_summary">
+            {{summary}}
+        </div>
+    </div>
+    <br>
+    {{/each}}
+
+</div>
+
+<br>
+<footer class="page-footer"
+    style="position:fixed;bottom:0;left:0;width:100%;border-top: 35px rgb(0, 9, 102) solid;background-color:rgb(0, 9, 102);color:white;text-align: center;font-family: 'Luckiest Guy', cursive;">
+
+    <div class="footers">
+        <div class="container">
+            © 2019 Rachel Silverthorn Design
+
+        </div>
+    </div>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="app.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
